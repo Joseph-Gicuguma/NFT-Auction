@@ -16,8 +16,10 @@ const CreateNFT = ({ deployContract }) => {
   const nftRef = useRef();
   const [isLoading, setIsLoading] = useState();
 
-  const handleOnClickCreate = async () => {
-
+  const handleOnClickCreate = async (e) => {
+    
+    e.preventDefault()
+    
     setIsLoading(true);
     const file = nftRef.current.files[0];
     const nftName = nameRef.current.value;
@@ -31,19 +33,18 @@ const CreateNFT = ({ deployContract }) => {
       url: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
       headers: {
         'Authorization': `Bearer ${process.env.REACT_APP_JWT}`,
-        // ...data.getHeaders()
       },
       data: data
     };
 
-    // const res = await axios(config);
-    // const uri = res.data.IpfsHash;
+    const res = await axios(config);
+    const uri = res.data.IpfsHash;
 
     deployContract(
       {
         basePrice: Reach.parseCurrency(priceRef.current.value && 10),
-        uri: "QmPnf6ph5Ft1UandaX9axeE76tkzihHcHRM8XMVa9LDHKo",
-        // uri,
+        // uri: "QmPnf6ph5Ft1UandaX9axeE76tkzihHcHRM8XMVa9LDHKo",
+        uri,
       },
       idRef.current.value && 100
     );

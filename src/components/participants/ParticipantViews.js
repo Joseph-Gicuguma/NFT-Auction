@@ -6,9 +6,9 @@ export const IsAuctionOn = ({ setIsAuctionOn, nftUri }) => {
 
   return (
     <div>
-      <section class="spacetop15 spacebottom10">
+      <section className="spacetop15 spacebottom10">
         <img src={`${baseImageUrl}${nftUri}`} alt="NFT" style={{ height: 100 }} />
-        <br/>
+        <br />
         Click here to begin auction
         <button className="spacetop2 btn bg-halfwhite size2 started" onClick={setIsAuctionOn}>Start</button>
       </section>
@@ -23,9 +23,12 @@ export const ShowBid = ({ nftUri }) => {
 
   return (
     <div>
-      <section class="spacetop15 spacebottom10">
+      <section className="spacetop15 spacebottom10">
         <img src={`${baseImageUrl}${nftUri}`} alt="NFT" style={{ height: 100 }} />
-        {content}
+        <br />
+        <div className="size2 ">
+          {content}
+        </div>
       </section>
     </div>
   )
@@ -40,12 +43,12 @@ export const GetBid = ({ placeBid, nftUri }) => {
 
   return (
     <div>
-      <section class="spacetop15 spacebottom10">
+      <section className="spacetop15 spacebottom10">
         <ShowBid nftUri={nftUri} />
-        <label class="size2" htmlFor="bid">Enter Bidding Amount</label>
-        <br/>
-        <input class="size2 spacetop1" type="number" name="bid amount" placeholder="Bid" id="bid" ref={bidInputRef} />
-        <br/>
+        <label className="size2" htmlFor="bid">Enter Bidding Amount</label>
+        <br />
+        <input className="size2 spacetop1" type="number" name="bid amount" placeholder="Bid" id="bid" ref={bidInputRef} />
+        <br />
         <button className="spacetop2 btn bg-halfwhite size2 started" onClick={handleOnClickBid}>Bid</button>
       </section>
     </div>
@@ -56,13 +59,15 @@ export const SeeOutCome = ({ navigateToAuction, nftUri }) => {
   const { latestOutcome } = useContext(MainAppContext);
   return (
     <div>
-     <section class="spacetop15 spacebottom10">
-     <img src={`${baseImageUrl}${nftUri}`} alt="NFT" style={{ height: 100 }} />
-     <br/>
-      Address {latestOutcome.who} won the auction paying {latestOutcome.bid} ALGO
-      <br />
-      <button className="spacetop2 btn bg-halfwhite size2 started" onClick={navigateToAuction}>Go to Auction</button>
-     </section>
+      <section className="spacetop15 spacebottom10">
+        <img src={`${baseImageUrl}${nftUri}`} alt="NFT" style={{ height: 100 }} />
+        <br />
+        <div className="spacetop2 size2">
+          <b>ADDRESS:</b> {latestOutcome.who} won the auction paying {latestOutcome.bid} <b>ALGO</b>
+        </div>
+        <br />
+        <button className="spacetop2 btn bg-halfwhite size2 started" onClick={navigateToAuction}>Go to Auction</button>
+      </section>
     </div>
   )
 }
@@ -70,8 +75,8 @@ export const SeeOutCome = ({ navigateToAuction, nftUri }) => {
 export const DeployingContract = () => {
   return (
     <div>
-      <section class="spacetop15 spacebottom10">
-      Deploying Contract
+      <section className="spacetop15 spacebottom10">
+        Deploying Contract
       </section>
     </div>
   )
@@ -80,8 +85,8 @@ export const DeployingContract = () => {
 export const FallBackView = () => {
   return (
     <div>
-      <section class="spacetop15 spacebottom10">
-      Oops. Looks like something went wrong.
+      <section className="spacetop15 spacebottom10">
+        Oops. Looks like something went wrong.
       </section>
     </div>
   )
@@ -90,9 +95,9 @@ export const FallBackView = () => {
 export const AwaitingAuction = ({ nftUri }) => {
   return (
     <div>
-      <section class="spacetop15 spacebottom10">
-      <img src={`${baseImageUrl}${nftUri}`} alt="NFT" style={{ height: 100 }} />
-      Waiting for auction to be started
+      <section className="spacetop15 spacebottom10">
+        <img src={`${baseImageUrl}${nftUri}`} alt="NFT" style={{ height: 100 }} />
+        Waiting for auction to be started
       </section>
     </div>
   )

@@ -39,8 +39,6 @@ exports.ConnectingWallet = () => {
 exports.ChooseRole = ({ deployBidder, deployCreator }) => {
   return (
     <div>
-      {/* <div>Deploy as creator : <button onClick={deployCreator}>Creator</button></div> */}
-      {/* <div>Deploy as bidder : <button onClick={deployBidder}>Bidder</button></div> */}
       <section id="home" class="spacetop15 spacebottom10">
         <div class="container">
           <div class="row jc-between ai-center col-reverse-s">
