@@ -6,6 +6,7 @@ import { DeployingContract, FallBackView, IsAuctionOn, IsAuctionOnSubViews, SeeO
 import { baseImageUrl } from "./ParticipantUtil";
 import { useState } from "react";
 
+
 const Reach = loadStdlib("ALGO");
 
 const CreateNFT = ({ deployContract }) => {
@@ -23,18 +24,18 @@ const CreateNFT = ({ deployContract }) => {
     const data = new FormData();
     data.append('file', file);
     data.append('pinataOptions', '{"cidVersion": 1}');
-    data.append('pinataMetadata', '{"name": "'+nftName+'", "keyvalues": {"company": "Pinata"}}');
+    data.append('pinataMetadata', '{"name": "' + nftName + '", "keyvalues": {"company": "Pinata"}}');
 
     const config = {
       method: 'post',
       url: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
-      headers: { 
-        'Authorization': `Bearer ${process.env.REACT_APP_JWT}`, 
+      headers: {
+        'Authorization': `Bearer ${process.env.REACT_APP_JWT}`,
         // ...data.getHeaders()
       },
-      data : data
+      data: data
     };
-    
+
     // const res = await axios(config);
     // const uri = res.data.IpfsHash;
 
@@ -50,33 +51,60 @@ const CreateNFT = ({ deployContract }) => {
 
   return (
     <div>
-      <label htmlFor="id">Nft Id</label>
-      <input type="number" name="id" id="id" placeholder="Nft Id" ref={idRef} />
-      <br />
-      <label htmlFor="name">Nft Name</label>
-      <input
-        type="text"
-        name="name"
-        id="name"
-        placeholder="Nft Name"
-        ref={nameRef}
-      />
-      <br />
-      <label htmlFor="price">Nft Price</label>
-      <input
-        type="number"
-        name="price"
-        id="price"
-        placeholder="0 ALGO"
-        ref={priceRef}
-      />
-      <br />
-      <label htmlFor="nft">Upload Nft</label>
-      <input type="file" name="nft" id="nft" ref={nftRef}/>
-      <br />
-      <button onClick={handleOnClickCreate} disabled={isLoading}>
-        {!isLoading ? 'Create' : 'Uploading...'}
-      </button>
+      <section class="spacetop15 spacebottom10">
+        <h1 className="size3 halfwhite">Welcome to the creator side</h1>
+        <div className="spacetop2">
+          <form >
+            <div >
+              <div className="">
+                <div className="">
+                  <label className="size2" htmlFor="id">Nft Id</label>
+                  <br/>
+                  <input className="size2" type="number" name="id" id="id" placeholder="Nft Id" ref={idRef} />
+                </div>
+
+                <div className="spacetop1">
+                  <label className="size2" htmlFor="name">Nft Name</label>
+                  <br/>
+                  <input
+                    className="size2"
+                    type="text"
+                    name="name"
+                    id="name"
+                    placeholder="Nft Name"
+                    ref={nameRef}
+                  />
+                </div>
+              </div>
+
+              <div className="spacetop1">
+                <label className="size2" htmlFor="price">Nft Price</label>
+                <br/>
+                <input
+                  className="size2 "
+                  type="number"
+                  name="price"
+                  id="price"
+                  placeholder="0 ALGO"
+                  ref={priceRef}
+                />
+              </div>
+
+              <div className="spacetop1">
+                <label className="size2" htmlFor="nft">Upload Nft</label>
+                <br/>
+                <input className="size2" type="file" name="nft" id="nft" ref={nftRef} />
+              </div>
+
+              <div className="spacetop1">
+                <button class="btn bg-halfwhite size2 started" onClick={handleOnClickCreate} disabled={isLoading}>
+                  {!isLoading ? 'Create' : 'Uploading...'}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
     </div>
   );
 };
@@ -88,22 +116,24 @@ const ShowContractInfo = ({ contractInfo, navigateToAuction, nftUri }) => {
   };
   return (
     <div>
-      <img src={`${baseImageUrl}${nftUri}`} alt="NFT" style={{height: 100}}/>
-      <pre>{contractInfo}</pre>
+     <section class="spacetop15 spacebottom10">
+     <img src={`${baseImageUrl}${nftUri}`} alt="NFT" style={{ height: 100 }} />
+      <pre className="size2">{contractInfo}</pre>
       <CopyToClipboard onCopy={handleCopy} text={contractInfo}>
-        <button>
+        <button className="spacetop2 btn bg-halfwhite size2 started">
           {copied ? "Copied" : "Copy to clipboard"}
         </button>
       </CopyToClipboard><br />
-      <button onClick={navigateToAuction}>Go to Auction</button>
+      <button className="spacetop2 btn bg-halfwhite size2 started" onClick={navigateToAuction}>Go to Auction</button>
+     </section>
     </div>
   );
 };
 
-const CreatorViews = ({ 
-  appState, 
-  args, 
-  deployContract, 
+const CreatorViews = ({
+  appState,
+  args,
+  deployContract,
   isAuctionOn,
   isOwner,
   placeBid,
@@ -115,13 +145,13 @@ const CreatorViews = ({
     case "deployingContract":
       return <DeployingContract />;
     case "showContractInfo":
-      return <ShowContractInfo contractInfo={args[1]} navigateToAuction={args[2]} nftUri={args[3]}/>;
-    case "nftAuction" :
-      return <IsAuctionOnSubViews isAuctionOn={isAuctionOn} isOwner={isOwner} setIsAuctionOn={setIsAuctionOn} placeBid={placeBid} nftUri={args[0]}/>
-    case "seeOutcome" :
-      return <SeeOutCome nftUri={args[0]} navigateToAuction={args[2]}/>
+      return <ShowContractInfo contractInfo={args[1]} navigateToAuction={args[2]} nftUri={args[3]} />;
+    case "nftAuction":
+      return <IsAuctionOnSubViews isAuctionOn={isAuctionOn} isOwner={isOwner} setIsAuctionOn={setIsAuctionOn} placeBid={placeBid} nftUri={args[0]} />
+    case "seeOutcome":
+      return <SeeOutCome nftUri={args[0]} navigateToAuction={args[2]} />
     default:
-      return <FallBackView/>
+      return <FallBackView />
   }
 };
 

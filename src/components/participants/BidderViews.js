@@ -11,8 +11,10 @@ const AttachContract = ({attachContract}) => {
 
   return (
     <div>
+      <section class="spacetop15 spacebottom10">
       <textarea name="contractInfo" ref={ctcInfoRef} id="contractInfo" cols="30" rows="10"></textarea>
-      <button onClick={handleOnClickAttach}>Attach</button>
+      <button className="spacetop2 btn bg-halfwhite size2 started" onClick={handleOnClickAttach}>Attach</button>
+      </section>
     </div>
   )
 }
