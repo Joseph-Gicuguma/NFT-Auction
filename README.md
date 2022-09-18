@@ -1,73 +1,73 @@
-# NFT-Auction
-Reach Umoja III Bounty hack
+# NFT Auction
 
-# Getting Started with Create React App
+## Getting Started
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Tutorial
 
-## Available Scripts
+**Below are the steps to help the reader re-create the same application application. We assume that you already know the basics of reach. If not checkout the [Rock Paper Scissors Tutorial](https://docs.reach.sh/tut/rps/#tut)**
 
-In the project directory, you can run:
+> By the end of this tutorial you will be able to create a D-App where one user can create an nft, and have other users bid for it. The highest bidder will gain ownership of the NFT and be able to resell it again; in a buy sell cycle.
 
-### `npm start`
+### Test First But Verify
+Rather than jumping into the Reach program, we're first going to write a test scenario corresponding to the bidding process. We'll demonstrate how to use Reach's testing tools to write a convenient testing framework customized for your application. We'll show the tests, then the framework, then the Reach code, and show how the Reach code connects to the framework.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+After setting up  your project with `./reach init`. Clear **index.mjs** and **index.rsh**
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+**In index.mjs,**
 
-### `npm test`
+https://github.com/RyanKoech/NFT-Auction/blob/d77732ef39ff30498ba42e7e43dc6a9fa5ab2da5/src/index.mjs#L103-L112
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+In this sample, we use `test.one` to define a single test scenario. We use the function makeNft, which we will define later, to create a JavaScript object for the NFT abstraction. When it is created, it has the details of the event in it.
 
-### `npm run build`
+https://github.com/RyanKoech/NFT-Auction/blob/d77732ef39ff30498ba42e7e43dc6a9fa5ab2da5/src/index.mjs#L114-L118
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Next, we define objects for each of the people involved in the scenario. This code uses NFT.makeBidders, a function which we will define later, to turn a list of labels into Bidder abstractions.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+https://github.com/RyanKoech/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf6b0f3e675779/src/index.mjs#L120-L146
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+From then on we perform the bidding cycle. `test.chkErr` Is to confirm various checks that might through error as will be seen in the reach code. `await NFT.waitUntilDeadline();` will be used to make sure the bidding sesssion terminates.
 
-### `npm run eject`
+https://github.com/RyanKoech/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf6b0f3e675779/src/index.mjs#L148-L154
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Finally, we print out the balances of everyone and see that they match our expectations. The function `test.run` instructs Reach to run all of the tests and not print out extra debugging information.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Framework Implementation
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+The framework is needed to facilitate the testing. It needs to provide:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- `makeNft` => A function which accepts the details of an nft and returns an NFT abstraction.
+- `NFT.Creator` =>  An abstraction of the Host.
+- `NFT.makeBidders` => A function that produces an array of Bidder abstractions, which are subclasses of Person abstractions.
+- `NFT.waitUntilDeadline()` => A function that waits until the deadline has passed.
+- `Person.startAuction()` => A function for a person to start an auction
+- `Bidder.placeBid()` => A function for one bidder to place a bid
+- `Person.getBalance` => A function to read one person's balance.
 
-## Learn More
+https://github.com/RyanKoech/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf6b0f3e675779/src/index.mjs#L1-L5
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+First, we have the basic header that imports and initializes the Reach standard library.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+https://github.com/RyanKoech/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf6b0f3e675779/src/index.mjs#L7-L11
 
-### Code Splitting
+We define the makeRSVP function and create an initial test account for the host and set its label for debugging.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+https://github.com/RyanKoech/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf6b0f3e675779/src/index.mjs#L13-L29
 
-### Analyzing the Bundle Size
+Next, we define the function `stdPerson` which takes an obj with an acc field and adds a Person.getBalance function that returns the account's current balance as a nice formatted string. We use this function to define the `NFT.Creator` value
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+https://github.com/RyanKoech/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf6b0f3e675779/src/index.mjs#L29-L35
 
-### Making a Progressive Web App
+Next, we define the deadline, based on the current time, and the `NFT.waitUntilDeadline` function for waiting until that time has passed.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+https://github.com/RyanKoech/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf6b0f3e675779/src/index.mjs#L37-L66
 
-### Advanced Configuration
+Now, we can define the details object that will be consumed by Reach then pass the object interact object for the creator contract. There after we have the creator observe event so that we can be notified on various actions.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+https://github.com/RyanKoech/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf6b0f3e675779/src/index.mjs#L68-L83
 
-### Deployment
+Next, we define the `NFT.makeBidder` function, which starts by creating a new test account and setting its label. There after we define the bidder functions. 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+https://github.com/RyanKoech/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf6b0f3e675779/src/index.mjs#L84-L99
 
-### `npm run build` fails to minify
+We close the definition of the Bidder abstraction by calling `stdPerson` to add the `Person.getBalance` function. Then, we define `NFT.makeBidders`, which produces a single promise out of the array of promises of Bidder abstractions. Also we define `Creator.startAuction`. These values are all wrapped together into a final object, which is the result of `makeNFT`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
