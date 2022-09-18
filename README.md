@@ -31,3 +31,43 @@ https://github.com/RyanKoech/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf6b0f3e
 
 Finally, we print out the balances of everyone and see that they match our expectations. The function `test.run` instructs Reach to run all of the tests and not print out extra debugging information.
 
+### Framework Implementation
+
+The framework is needed to facilitate the testing. It needs to provide:
+
+- `makeNft` => A function which accepts the details of an nft and returns an NFT abstraction.
+- `NFT.Creator` =>  An abstraction of the Host.
+- `NFT.makeBidders` => A function that produces an array of Bidder abstractions, which are subclasses of Person abstractions.
+- `NFT.waitUntilDeadline()` => A function that waits until the deadline has passed.
+- `Person.startAuction()` => A function for a person to start an auction
+- `Bidder.placeBid()` => A function for one bidder to place a bid
+- `Person.getBalance` => A function to read one person's balance.
+
+https://github.com/RyanKoech/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf6b0f3e675779/src/index.mjs#L1-L5
+
+First, we have the basic header that imports and initializes the Reach standard library.
+
+https://github.com/RyanKoech/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf6b0f3e675779/src/index.mjs#L7-L11
+
+We define the makeRSVP function and create an initial test account for the host and set its label for debugging.
+
+https://github.com/RyanKoech/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf6b0f3e675779/src/index.mjs#L13-L29
+
+Next, we define the function `stdPerson` which takes an obj with an acc field and adds a Person.getBalance function that returns the account's current balance as a nice formatted string. We use this function to define the `NFT.Creator` value
+
+https://github.com/RyanKoech/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf6b0f3e675779/src/index.mjs#L29-L35
+
+Next, we define the deadline, based on the current time, and the `NFT.waitUntilDeadline` function for waiting until that time has passed.
+
+https://github.com/RyanKoech/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf6b0f3e675779/src/index.mjs#L37-L66
+
+Now, we can define the details object that will be consumed by Reach then pass the object interact object for the creator contract. There after we have the creator observe event so that we can be notified on various actions.
+
+https://github.com/RyanKoech/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf6b0f3e675779/src/index.mjs#L68-L83
+
+Next, we define the `NFT.makeBidder` function, which starts by creating a new test account and setting its label. There after we define the bidder functions. 
+
+https://github.com/RyanKoech/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf6b0f3e675779/src/index.mjs#L84-L99
+
+We close the definition of the Bidder abstraction by calling `stdPerson` to add the `Person.getBalance` function. Then, we define `NFT.makeBidders`, which produces a single promise out of the array of promises of Bidder abstractions. Also we define `Creator.startAuction`. These values are all wrapped together into a final object, which is the result of `makeNFT`.
+
