@@ -117,7 +117,6 @@ test.one('NFTEST', async () => {
   ]);
   const [Bidder1, Bidder2, Bidder3] = Bidders;
 
-  // await Creator.startAuction();
   await Bidder1.placeBid(stdlib.parseCurrency(25));
   await test.chkErr('Creator', 'The auction is already going on', async () => {
     await Creator.startAuction();
