@@ -27,3 +27,7 @@ https://github.com/RyanKoech/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf6b0f3e
 
 From then on we perform the bidding cycle. `test.chkErr` Is to confirm various checks that might through error as will be seen in the reach code. `await NFT.waitUntilDeadline();` will be used to make sure the bidding sesssion terminates.
 
+https://github.com/RyanKoech/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf6b0f3e675779/src/index.mjs#L148-L154
+
+Finally, we print out the balances of everyone and see that they match our expectations. The function `test.run` instructs Reach to run all of the tests and not print out extra debugging information.
+
