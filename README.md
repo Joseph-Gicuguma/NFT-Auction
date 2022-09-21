@@ -45,6 +45,20 @@ You’ll know that everything is in order if you can run
 
 >$ ./reach compile --help
 
+**Get language support for Reach in your editor by visiting IDE/Text Editor Support[https://docs.reach.sh/guide-editor-support.html].
+Now that your Reach installation is in order, you should open a text editor and get ready to write your Reach application!**
+
+### Scaffolding and Setup
+
+**In this tutorial, we’ll be building a version of NFT Auction!
+There will be a creator who owns Nft and starts the auction, and two people who bid on the auction.
+We’ll start simple and slowly make the application more fully-featured.**
+
+You should follow along by copying each part of the program and seeing how things go.
+If you’re like us, you may find it beneficial to type each line out, rather than copying & pasting so you can start building your muscle memory and begin to get a sense for each part of a Reach program
+
+
+
 
 
 ## Tutorial
