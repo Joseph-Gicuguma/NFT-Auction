@@ -1,4 +1,7 @@
 # NFT Auction
+In this tutorial, we'll walk through a simple decentralized application, the NFT Auction dAPP; where NFT creators are able to mint their digital artwork and other people can bid amongst each other and buy the NFT from the creator.
+
+This tutorial aims to give the required knowledge to build, test, and implement custom blockchain logic easily.
 
 ## Getting Started
 
