@@ -22,6 +22,30 @@ If you’re on Ubuntu, you can run sudo apt install make to get it.
 
 >$ docker-compose --version
 
+If you’re using Windows, consult the guide to using Reach on Windows[https://docs.reach.sh/guide-windows.html].
+
+Once you’ve confirmed that they are installed, choose a directory for this project. We recommend
+
+>$ mkdir -p ~/reach/nftroyalties && cd ~/reach/nftroyalties
+
+Next, install Reach by downloading it from GitHub[https://github.com/reach-sh/reach-lang] by running
+
+>$ curl https://raw.githubusercontent.com/reach-sh/reach-lang/master/reach -o reach ; chmod +x reach
+
+You’ll know that the download worked if you can run
+
+>$ ./reach version
+
+Since Reach is Dockerized, when you first use it, you’ll need to download the images it uses.
+This will happen automatically when you first use it, but you can do it manually now by running
+
+>$ ./reach update
+
+You’ll know that everything is in order if you can run
+
+>$ ./reach compile --help
+
+
 
 ## Tutorial
 
