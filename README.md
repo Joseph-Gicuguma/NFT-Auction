@@ -130,7 +130,7 @@ https://github.com/Joseph-Gicuguma/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf
 
 We close the definition of the Bidder abstraction by calling `stdPerson` to add the `Person.getBalance` function. Then, we define `NFT.makeBidders`, which produces a single promise out of the array of promises of Bidder abstractions. Also we define `Creator.startAuction`. These values are all wrapped together into a final object, which is the result of `makeNFT`.
 
-### Now Let the Auction Begin
+### Views and Events
 First, we'll review the changes to the Reach application code.
 
 https://github.com/Joseph-Gicuguma/NFT-Auction/blob/5e92bd023489576371ad6ae580dba8a3524d0aec/src/index.rsh#L5-L33
@@ -155,8 +155,30 @@ Next, let's look at the code that emits instances of the `Events` we defined.
 
 https://github.com/Joseph-Gicuguma/NFT-Auction/blob/5e92bd023489576371ad6ae580dba8a3524d0aec/src/index.rsh#L58-L66
 
-We can emit an event by calling `<Events name>.<kind name>(args)` in a consensus step. We do so inside of the `.api_` for the Owner.isAuctionOn` API call on line 62.
+We can emit an event by calling `<Events name>.<kind name>(args)` in a consensus step. We do so inside of the `.api_` for the `Owner.isAuctionOn` API call on line 62. Note that in each of the `._api` calls, various checks are inplace to ensure that they can be called from the frontend only under specific cercirmastances.
 
 https://github.com/Joseph-Gicuguma/NFT-Auction/blob/5e92bd023489576371ad6ae580dba8a3524d0aec/src/index.rsh#L79-L87
 
 There are many other instances where Events are emmit in the contract. As seen above in lines 81-84 , we wrap it inside an if statement to ensure that the event is emmitted only when the NFT ownership has changed.
+
+In conslusion, from the perspective of a frontend or even a conventionaly application, the View serve the purpose of providing general and primary information for setting up the applications while Events are there to ensure the application of updated live with actions taken from other users that might affect the current user.
+
+### Having a Frontend
+This sections assume you are well firmiliar with React framework but will be explained ensure that it can be replicated on other frameworks.
+
+We use the [MainAppContext.js](https://github.com/Joseph-Gicuguma/NFT-Auction/blob/main/src/context/MainAppContext.js) to store general application State and its modifier methods. The [Bidder.js](https://github.com/Joseph-Gicuguma/NFT-Auction/blob/main/src/components/participants/Bidder.js) and [Creator.js](https://github.com/Joseph-Gicuguma/NFT-Auction/blob/main/src/components/participants/Creator.js) which extend [Participant.js](https://github.com/Joseph-Gicuguma/NFT-Auction/blob/main/src/components/participants/Participant.js) are provided as interact object that enable the user to interact with the frontend. 
+
+https://github.com/Joseph-Gicuguma/NFT-Auction/blob/0b528776e260f96c3aab2ded7f7c3a3831889f08/src/components/participants/Participant.js#L47-L86
+
+As seen above, for all users, `this.contract.e.<event name>.monitor` is used to keep the frontend update with events on-chain. 
+
+https://github.com/Joseph-Gicuguma/NFT-Auction/blob/0b528776e260f96c3aab2ded7f7c3a3831889f08/src/components/participants/Participant.js#L88-L94
+
+The `this.contract.a.<Api name>.<Method name>()` is used to make calls to the API methods to place bids by the users.
+
+https://github.com/Joseph-Gicuguma/NFT-Auction/blob/0b528776e260f96c3aab2ded7f7c3a3831889f08/src/components/participants/Creator.js#L25-L27
+
+The `createNft` method serves it corresponding function for the Creator Particiapant.
+
+Other than those, the rest in [Bidder.js](https://github.com/Joseph-Gicuguma/NFT-Auction/blob/main/src/components/participants/Bidder.js) and [Creator.js](https://github.com/Joseph-Gicuguma/NFT-Auction/blob/main/src/components/participants/Creator.js) are concerned with statemanagement, navigation and deployment of the code which are out of the scope of thise tutorial. 
+
