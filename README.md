@@ -63,7 +63,7 @@ If you’re like us, you may find it beneficial to type each line out, rather th
 
 ## Tutorial
 
-**Below are the steps to help the reader re-create the same application application. We assume that you already know the basics of reach. If not checkout the [Rock Paper Scissors Tutorial](https://docs.reach.sh/tut/rps/#tut)**
+**Below are the steps to help the reader re-create the same application application. We assume that you already know the basics of reach. If not, checkout the [Rock Paper Scissors Tutorial](https://docs.reach.sh/tut/rps/#tut)**
 
 > By the end of this tutorial you will be able to create a D-App where one user can create an nft, and have other users bid for it. The highest bidder will gain ownership of the NFT and be able to resell it again; in a buy sell cycle.
 
@@ -130,3 +130,33 @@ https://github.com/Joseph-Gicuguma/NFT-Auction/blob/9f74443a9ea71fb01dc54712b1cf
 
 We close the definition of the Bidder abstraction by calling `stdPerson` to add the `Person.getBalance` function. Then, we define `NFT.makeBidders`, which produces a single promise out of the array of promises of Bidder abstractions. Also we define `Creator.startAuction`. These values are all wrapped together into a final object, which is the result of `makeNFT`.
 
+### Now Let the Auction Begin
+First, we'll review the changes to the Reach application code.
+
+https://github.com/Joseph-Gicuguma/NFT-Auction/blob/5e92bd023489576371ad6ae580dba8a3524d0aec/src/index.rsh#L5-L33
+
+We add definitions for the View and Event objects.
+
+Let's look at the `View` first. The first argument is a label for it, like how we give labels to APIs and participants. Next, we provide an object where the keys are the names of the view components and the fields are their types. This object is just like an interact object, except that the values are provided from Reach, rather than to Reach. In this case, like APIs, these values can be accessed on- and off-chain. On-chain, they can be accessed using the normal ABI of the consensus network, just like APIs. For example, the `details` are provided via a function named `Info_details` that takes no arguments and returns a `Details` structure. Off-chain, they can be accessed via a frontend function like `ctc.views.Info.details()`. The off-chain function returns the value or an indication that it was not available.
+
+Next, let's look at the `Events` definition. It can also be provided with a label, but we've chosen not to include one. We don't have to provide labels for APIs or Views either, but we think it is a good idea in those cases. The object provided to Events is not an interface, where the keys are types, but instead has tuples of types as the values. These are the values that will be emitted together. For example, the `seeOutcome` event will contain an address and an integer. Like APIs and Views, they are available on- and off-chain. On-chain, they are available using the standard ABI for the platform. (Although, note, that some chains, like Ethereum, don't provide any on-chain mechanism for consuming events.) Off-chain, they are available via a frontend function like `ctc.events.register`. The off-chain function has sub-methods for reading the next instance of the event or monitoring every event, as well as other options.
+
+In both cases, we have not actually defined the values or meaning of these Views and Events. We've merely indicated that our application contains them. This is similar to how we define a Participant and then later indicate what actions it performs. Let's look at the view definitions next.
+
+https://github.com/Joseph-Gicuguma/NFT-Auction/blob/5e92bd023489576371ad6ae580dba8a3524d0aec/src/index.rsh#L34-L43
+
+A View can have a different value at each point in the program, including not having any value at all. You define the value by calling `<View name>.<field name>.set` and providing a value that satisfies the type. For example, here (on line 43) we indicate that the details field is always the same as the `nftInfo` variable. This definition applies to all dominated occurrences of the `commit()` keyword. Views are not mutable references: instead, they are ways of naming, for external consumption, portions of the consensus state.
+
+https://github.com/Joseph-Gicuguma/NFT-Auction/blob/5e92bd023489576371ad6ae580dba8a3524d0aec/src/index.rsh#L52-L55
+
+We similarly expose the contents of the Guests mapping, as well as the `owner` variable. We use the `.define` feature of `parllelReduce` to introduce a statement that dominates the `commit()`s implicit in the parallelReduce. This context is the only context that has access to the `owner` variable, which is why we must place it there.
+
+Next, let's look at the code that emits instances of the `Events` we defined.
+
+https://github.com/Joseph-Gicuguma/NFT-Auction/blob/5e92bd023489576371ad6ae580dba8a3524d0aec/src/index.rsh#L58-L66
+
+We can emit an event by calling `<Events name>.<kind name>(args)` in a consensus step. We do so inside of the `.api_` for the Owner.isAuctionOn` API call on line 62.
+
+https://github.com/Joseph-Gicuguma/NFT-Auction/blob/5e92bd023489576371ad6ae580dba8a3524d0aec/src/index.rsh#L79-L87
+
+There are many other instances where Events are emmit in the contract. As seen above in lines 81-84 , we wrap it inside an if statement to ensure that the event is emmitted only when the NFT ownership has changed.
